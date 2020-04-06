@@ -25,7 +25,7 @@ SECRET_KEY = '7ks=*w+lq#7_@td&#kbd5n#_58dd40@s3sj1&^y$s$6o0b752#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'frozen-ocean-62101.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'smsasigurari.herokuapp.com']
 
 
 # Application definition
