@@ -25,7 +25,7 @@ SECRET_KEY = '7ks=*w+lq#7_@td&#kbd5n#_58dd40@s3sj1&^y$s$6o0b752#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -133,6 +133,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'sms/static/'
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
