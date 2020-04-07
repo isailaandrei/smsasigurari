@@ -6,42 +6,45 @@
 <div>
 
     <div>
-    <table class="table table-striped table-bordered">
+    <table  id="example" class="table table-striped table-bordered" style="width:100%">
         <h2> Expirari </h2>
-        <tr>
-            <th class="active">
-                <input type="checkbox" class="select-all checkbox" name="select-all" />
-            </th>
-            <th class="success">Nume</th>
-            <th class="warning">Tip polita</th>
-            <th class="info">Numar masina</th>
-            <th class="info">Numar de telefon</th>
-            <th class="info">Data expirare</th>
-
-        </tr>
-
-        {% if expirari %}
-            {% for expirare in expirari %}
-            <tr>    
-                <td class="active">
-                <input type="checkbox" class="select-item checkbox" name="select-item" value="{{ expirare.id }}" />
-                </td>
-                
-
-                <td class="success">{{ expirare.name }}</td>
-                <td class="warning">{{ expirare.tip_asigurare}}</td>
-                <td class="info">{{ expirare.numar_masina }}</td>
-                <td class="info">{{ expirare.numar_telefon }}</td>
-                <td class="info">{{ expirare.valabilitate_sfarsit }}</td>
+        <thead>
+            <tr>
+                <th class="active">
+                    <input type="checkbox" class="select-all checkbox" name="select-all" />
+                </th>
+                <th class='th-sm'>Nume</th>
+                <th class='th-sm'>Tip polita</th>
+                <th class='th-sm'>Numar masina</th>
+                <th class='th-sm'>Numar de telefon</th>
+                <th class='th-sm'>Data expirare</th>
 
             </tr>
-            {% endfor %}
-            
-        {% endif %}
+        </thead>
+        <tbody>
+            {% if expirari %}
+                {% for expirare in expirari %}
+                <tr>    
+                    <td class="active">
+                    <input type="checkbox" class="select-item checkbox" name="select-item" value="{{ expirare.id }}" />
+                    </td>
+                    
+
+                    <td>{{ expirare.name }}</td>
+                    <td>{{ expirare.tip_asigurare}}</td>
+                    <td>{{ expirare.numar_masina }}</td>
+                    <td>{{ expirare.numar_telefon }}</td>
+                    <td>{{ expirare.valabilitate_sfarsit }}</td>
+
+                </tr>
+                {% endfor %}
+                
+            {% endif %}
+            </tbody>
     </table>
 
     <div>
-        <button id="select-all" class="btn button-default">(De) Selecteaza Tot</button>
+        <button id="select-all" class="btn button-default btn-secondary">(De) Selecteaza Tot</button>
         <button id="delete" type="button" class="btn btn-danger">Sterge</button>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Trimite </button>
 
@@ -126,6 +129,12 @@
 </div>
 
 <script>
+
+
+    $(document).ready(function() {
+    $('#example').DataTable();
+    });
+
     $(function(){
 
         //button send SMS
