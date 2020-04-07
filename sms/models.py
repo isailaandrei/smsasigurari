@@ -1,6 +1,12 @@
 from django.db import models
 from django.conf import settings
 
+import nexmo
+import csv
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 class Expirari(models.Model):
     name = models.CharField(blank = True, max_length=100)
@@ -22,9 +28,7 @@ class Messages(models.Model):
         return self.name
 
 
-
-
-def importCSV(request):
+def uploadCSV(request):
 
     try:
         csv_file = request.FILES["csv_file"]
@@ -83,6 +87,10 @@ def importCSV(request):
             data_dict['valabilitate_sfarsit'] = fields[pos.get('valabilitate_sfarsit', -1)]
             data_dict['sucursala'] = 'Alba'
 
+            # Doar polite RCA deocamdata
+            if data_dict['tip_asigurare'] != 'RCA':
+                continue
+
             numar_telefon = fields[pos.get('numar_telefon', -1)]
             if numar_telefon.startswith('7'):
                 numar_telefon = '0' + numar_telefon
@@ -125,12 +133,6 @@ def sendSMS(expirari, messageObject):
             'text': message.format(expirare.numar_masina, str(expirare.valabilitate_sfarsit))
         })
 
-        if response['messages'][0]['status'] == '0':
-            sent[expirare] = True
+        # if response['messages'][0]['status'] == '0':
             # expirare.mesaje_trimise += 1
             # expirare.save()
-        else:
-            sent[expirare] = False
-            logger.error(response[['messages'][0]])
-
-    

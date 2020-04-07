@@ -3,30 +3,27 @@ from django.template import RequestContext
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views import View
 
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseRedirect
 
-from .models import Expirari, Messages
+from .models import Expirari, Messages, uploadCSV, sendSMS
 from .forms import ExpirariForm
 
 import logging
 import json
 
 
-import csv
-
-import nexmo
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
+@method_decorator(login_required, name='dispatch')
 class HomeView(View):
 
-    @login_required
     def get(self, request):
         context = {
             'expirari': Expirari.objects.filter(mesaje_trimise=0),
@@ -34,12 +31,14 @@ class HomeView(View):
             'mesaje': Messages.objects.all(),
         } 
 
-        return render(request, 'home.html', context)
+        return render(request, 'sms/home.html', context)
 
+@method_decorator(login_required, name='dispatch')
 class SendView(View):
 
-    @login_required
     def post(self, request):
+
+        logger.error('here')
         expirariIds = request.POST.get('expirari-ids', None)
         messageId = request.POST.get('msg-id', '')
         delete_rows = request.POST.get('Delete', False)
@@ -47,13 +46,14 @@ class SendView(View):
         expirariIds = json.loads(expirariIds)
 
         if delete_rows:
+            logger.error('here2')
             Expirari.objects.filter(pk__in=expirariIds).delete()
             return JsonResponse({'success':'true'})
       
         try:
             expirari = Expirari.objects.filter(pk__in=expirariIds)
             message = Messages.objects.filter(pk=messageId)[0]
-            models.sendSMS(expirari, message)
+            sendSMS(expirari, message)
         except Exception as e:
             logger.error(str(e))
             return JsonResponse({'success':'false'})
@@ -61,20 +61,19 @@ class SendView(View):
         return JsonResponse({'success':'true'})    
      
 
+@method_decorator(login_required, name='dispatch')
 class AboutView(View):
 
-    @login_required
     def get(self, request):
-       return render(request, 'about.html', {})
+       return render(request, 'sms/about.html', {})
 
+@method_decorator(login_required, name='dispatch')
 class LoadView(View):
 
-    @login_required
     def get(self, request):
-        return render(request, "loadData.html", data)
-
-    @login_required    
+        return render(request, "sms/loadData.html")
+    
     def post(self, request):
-        return models.uploadCSV(request)     
+        return uploadCSV(request)     
 
 

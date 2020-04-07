@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sms/base.html" %}
 
 {% block page_content %}
 
@@ -142,7 +142,6 @@
                     type: "POST",
                     url: '/sendSMS/',
                     data: {
-                      'Delete': 'false',
                       'expirari-ids': JSON.stringify(items),
                       'msg-id': msgId, 
                     },
