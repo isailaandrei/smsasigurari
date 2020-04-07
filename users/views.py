@@ -2,20 +2,21 @@ from django.shortcuts import render, redirect
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
-def register(request):
-    if request.method == 'POST':
+
+@method_decorator(login_required, name='dispatch')
+class RegisterView(View):
+
+    def post(self, request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
             form.save()
-            messages.success(request, f'Your account has been created, please log in!')
+            messages.success(request, f'Contul dumneavoastra a fost creat!')
             return redirect('login')
-    else:
-            form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
-
-
-@login_required
-def profile(request):
-    return render(request, 'users/profile.html')
+    
+    def get(self, request):
+        form = UserRegisterForm()
+        return render(request, 'users/register.html', {'form': form})

@@ -86,7 +86,7 @@ def uploadCSV(request):
                 continue
 
             if data_dict['numar_telefon'].startswith('7'):
-                data_dict['numar_telefon'] = '400' + data_dict['numar_telefon']
+                data_dict['numar_telefon'] = '+40 ' + data_dict['numar_telefon']
 
             logger.error('here4')
 
