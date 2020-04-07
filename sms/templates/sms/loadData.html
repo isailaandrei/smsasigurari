@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block page_content %}
 
+<h2>Incarcati fisiere in format CSV</h2>
+
 <form action="{% url "sms-incarca" %}" method="POST" enctype="multipart/form-data" class="form-horizontal"> 
 {% csrf_token %}
     <div class="form-group">

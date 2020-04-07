@@ -1,11 +1,11 @@
 from django.urls import path
 
 from . import views
-
+from .views import LoadView, AboutView, HomeView, SendView
 urlpatterns = [
-    path('', views.home, name='sms-home'),    
-    path('sendSMS/', views.send, name='sms-send'),
-    path('loadData/', views.load, name='sms-incarca'),    
-    path('about/', views.about, name='sms-about'),    
+    path('', HomeView.as_view(), name='sms-home'),    
+    path('sendSMS/', SendView.as_view(), name='sms-send'),
+    path('loadData/', LoadView.as_view(), name='sms-incarca'),    
+    path('about/', AboutView.as_view(), name='sms-about'),    
 
 ]
