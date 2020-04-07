@@ -1,4 +1,4 @@
- <!-- Send csrf token when making AJAX requests-->
+ // <!-- Send csrf token when making AJAX requests-->
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -25,4 +25,96 @@ $.ajaxSetup({
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
+});
+
+
+// home.html scripts
+
+$(document).ready(function() {
+$('#tabel-expirari').DataTable();
+});
+
+$(document).ready(function() {
+$('#tabel-trimise').DataTable();
+});
+
+   $(function(){
+
+        //button send SMS
+        $("#selected").click(function () {
+            var items=[];
+            $("input.select-item:checked:checked").each(function (index,item) {
+                items[index] = item.value;
+            });
+            if (items.length < 1) {
+                alert("Nu ati selectat niciun destinatar");
+            }else {
+                var msgId = $('#inputState').children(":selected").attr("value")
+                $.ajax({
+                    type: "POST",
+                    url: '/sendSMS/',
+                    data: {
+                      'expirari-ids': JSON.stringify(items),
+                      'msg-id': msgId, 
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        location.reload();
+                        // alert("Success! SMSurile au fost trimise");
+                    }
+                  });
+            }
+        });
+
+        //button delete 
+        $("#delete").click(function () {
+            var items=[];
+            $("input.select-item:checked:checked").each(function (index,item) {
+                items[index] = item.value;
+            });
+            if (items.length < 1) {
+                alert("Nu ati selectat nimic");
+            }else {
+                $.ajax({
+                    type: "POST",
+                    url: '/sendSMS/',
+                    data: {
+                      'Delete': 'True',
+                      'expirari-ids': JSON.stringify(items)
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        location.reload();
+                        // alert("Success! SMSurile au fost trimise");
+                    }
+                  });
+            }
+        });
+
+        //button select all or cancel
+        $("#select-all").click(function () {
+            var all = $("input.select-all")[0];
+            all.checked = !all.checked
+            var checked = all.checked;
+            $("input.select-item").each(function (index,item) {
+                item.checked = checked;
+            });
+        });
+
+
+        //column checkbox select all or cancel
+        $("input.select-all").click(function () {
+            var checked = this.checked;
+            $("input.select-item").each(function (index,item) {
+                item.checked = checked;
+            });
+        });
+
+
+         $("#inputState").change(function () {
+            var id = $('#inputState').children(":selected").attr("title")
+            $("#message-textarea")[0].value = id;
+    });
+
+
 });

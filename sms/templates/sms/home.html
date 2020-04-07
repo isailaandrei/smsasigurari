@@ -6,7 +6,7 @@
 <div>
 
     <div>
-    <table  id="example" class="table table-striped table-bordered" style="width:100%">
+    <table id="tabel-expirari" class="table table-striped table-bordered" style="width:100%">
         <h2> Expirari </h2>
         <thead>
             <tr>
@@ -57,32 +57,32 @@
 
 <div>
 
-    <table class="table table-striped table-bordered">
+    <table id="tabel-trimise" class="table table-striped table-bordered" style="width:100%">
         <h3> SMSuri trimise </h3>
-        <tr>
-            <th class="success">Nume</th>
-            <th class="warning">Tip polita</th>
-            <th class="info">Numar de telefon</th>
-            <th class="info">Data expirare</th>
-            <th class="info">SMSuri trimise</th>
-
-        </tr>
-
-        {% if trimise %}
-            {% for sms_trimis in trimise %}
-            <tr>        
-                <td class="success">{{ sms_trimis.name }}</td>
-                <td class="warning">{{ sms_trimis.tip_asigurare}}</td>
-                <td class="info">{{ sms_trimis.numar_telefon }}</td>
-                <td class="info">{{ sms_trimis.valabilitate_sfarsit }}</td>
-                <td class="info">{{ sms_trimis.mesaje_trimise }}</td>
-
+        <thead>
+            <tr>
+                <th>Nume</th>
+                <th>Tip polita</th>
+                <th>Numar de telefon</th>
+                <th>Data expirare</th>
+                <th>SMSuri trimise</th>
             </tr>
-            {% endfor %}
-            
-        {% endif %}
+        </thead>
+        <tbody>
+            {% if trimise %}
+                {% for sms_trimis in trimise %}
+                <tr>        
+                    <td>{{ sms_trimis.name }}</td>
+                    <td>{{ sms_trimis.tip_asigurare}}</td>
+                    <td>{{ sms_trimis.numar_telefon }}</td>
+                    <td>{{ sms_trimis.valabilitate_sfarsit }}</td>
+                    <td>{{ sms_trimis.mesaje_trimise }}</td>
 
-
+                </tr>
+                {% endfor %}
+                
+            {% endif %}
+        </tbody>
     </table>
 
 </div>
@@ -127,94 +127,5 @@
     </div>
   </div>
 </div>
-
-<script>
-
-
-    $(document).ready(function() {
-    $('#example').DataTable();
-    });
-
-    $(function(){
-
-        //button send SMS
-        $("#selected").click(function () {
-            var items=[];
-            $("input.select-item:checked:checked").each(function (index,item) {
-                items[index] = item.value;
-            });
-            if (items.length < 1) {
-                alert("Nu ati selectat niciun destinatar");
-            }else {
-                var msgId = $('#inputState').children(":selected").attr("value")
-                $.ajax({
-                    type: "POST",
-                    url: '/sendSMS/',
-                    data: {
-                      'expirari-ids': JSON.stringify(items),
-                      'msg-id': msgId, 
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        location.reload();
-                        // alert("Success! SMSurile au fost trimise");
-                    }
-                  });
-            }
-        });
-
-        //button delete 
-        $("#delete").click(function () {
-            var items=[];
-            $("input.select-item:checked:checked").each(function (index,item) {
-                items[index] = item.value;
-            });
-            if (items.length < 1) {
-                alert("Nu ati selectat nimic");
-            }else {
-                $.ajax({
-                    type: "POST",
-                    url: '/sendSMS/',
-                    data: {
-                      'Delete': 'True',
-                      'expirari-ids': JSON.stringify(items)
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        location.reload();
-                        // alert("Success! SMSurile au fost trimise");
-                    }
-                  });
-            }
-        });
-
-        //button select all or cancel
-        $("#select-all").click(function () {
-            var all = $("input.select-all")[0];
-            all.checked = !all.checked
-            var checked = all.checked;
-            $("input.select-item").each(function (index,item) {
-                item.checked = checked;
-            });
-        });
-
-
-        //column checkbox select all or cancel
-        $("input.select-all").click(function () {
-            var checked = this.checked;
-            $("input.select-item").each(function (index,item) {
-                item.checked = checked;
-            });
-        });
-
-
-         $("#inputState").change(function () {
-            var id = $('#inputState').children(":selected").attr("title")
-            $("#message-textarea")[0].value = id;
-    });
-
-
-});
-</script>
 
 {% endblock %}
