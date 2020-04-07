@@ -1,6 +1,6 @@
 from django import forms
-from .models import Expirari
 from django.conf import settings
+from .models import Expirari
 
 class ExpirariForm(forms.ModelForm):
     valabilitate_sfarsit = forms.DateField(label='valabilitate_sfarsit', input_formats=settings.DATE_INPUT_FORMATS, required=True)

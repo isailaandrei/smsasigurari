@@ -7,10 +7,12 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views import View
 
+
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseRedirect
 
-from .models import Expirari, Messages, uploadCSV, sendSMS
+from .models import Expirari, Messages, sendSMS
+from .utils.fileUpload import uploadCSV
 from .forms import ExpirariForm
 
 import logging
