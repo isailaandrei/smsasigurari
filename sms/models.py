@@ -38,19 +38,18 @@ def sendSMS(expirari, messageObject):
     message = messageObject.message
 
     for expirare in expirari:
-        numar_telefon = expirare.numar_telefon.replace(' ', '')
         valabilitate_sfarsit = get_romanian_date(expirare.valabilitate_sfarsit)
 
         response = client.send_message({
             'from': 'Asigurari',
-            'to': numar_telefon,
+            'to': expirare.numar_telefon,
             'text': message.format(expirare.numar_masina, valabilitate_sfarsit)
         })
 
         if response['messages'][0]['status'] == '0':
             expirare.delete()
         else:
-            messages.error('Mesajul nu a putut fi trimis pentru numarul lui {} +\
+            messages.error('Mesajul nu a putut fi trimis lui {} +\
                    pe numarul de telefon {}.'.format(expirare.name, expirare.numar_telefon))
 
 def get_romanian_date(date):

@@ -80,9 +80,9 @@ def uploadCSV(request):
                 continue
 
             if data_dict['numar_telefon'].startswith('7'):
-                data_dict['numar_telefon'] = '+40 ' + data_dict['numar_telefon']
+                data_dict['numar_telefon'] = '+40' + data_dict['numar_telefon']
             elif data_dict['numar_telefon'].startswith('07'):
-                data_dict['numar_telefon'] = '+40' + data_dict['numar_telefon'][1:]
+                data_dict['numar_telefon'] = '+4' + data_dict['numar_telefon']
 
             try:
                 form = ExpirariForm(data_dict)
@@ -123,7 +123,7 @@ def remove_commas_inside_fields(line):
         line = line.replace('"', '', 1)
         
         field = aux =  line[fc:sc]
-        field = field.replace(',', ' ')
+        field = field.replace(',', '')
 
         line = line.replace(aux, field)        
     
