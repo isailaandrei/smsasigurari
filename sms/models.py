@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.conf import settings
 
 import nexmo
 import csv
@@ -33,7 +34,7 @@ class Messages(models.Model):
 
 def sendSMS(expirari, messageObject):
 
-    client = nexmo.Client(key='cf5281a4', secret='4cCLU6v3J4lIIOaZ')
+    client = nexmo.Client(key=settings.NEXMO_API_KEY, secret=settings.NEXMO_SECRET)
     message = messageObject.message
     
     for expirare in expirari:

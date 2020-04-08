@@ -146,3 +146,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'sms-home'
 LOGIN_URL = 'login'
+
+NEXMO_API_KEY=os.environ['NEXMO_API_KEY']
+NEXMO_SECRET=os.environ['NEXMO_SECRET']
