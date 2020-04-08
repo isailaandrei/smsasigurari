@@ -74,7 +74,7 @@
           <!-- Messages -->
           
           {% if messages %}
-            <ul class="messages">
+            <ul class="messages" style='list-style-type: none'>
                 {% for message in messages %}
                 <li  {% if message.tags %} class="alert alert-{{ message.tags }} " {% endif %}> {{ message }} </li>
                 {% endfor %}
