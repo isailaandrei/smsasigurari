@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7ks=*w+lq#7_@td&#kbd5n#_58dd40@s3sj1&^y$s$6o0b752#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'smsasigurari.herokuapp.com']
 
@@ -88,13 +89,16 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 #     }
 # }
 
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, 
+                        default='sqlite:////'  + os.path.join(BASE_DIR, 'db.sqlite3'))
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

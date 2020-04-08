@@ -11,7 +11,7 @@ from django.views import View
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseRedirect
 
-from .models import Expirari, Messages, sendSMS
+from .models import Expirari, Messages, sendSMS, get_romanian_date
 from .utils.fileUpload import uploadCSV
 from .forms import ExpirariForm
 
@@ -27,9 +27,14 @@ logger = logging.getLogger(__name__)
 class HomeView(View):
 
     def get(self, request):
+
+        expirari = Expirari.objects.filter(mesaje_trimise=0)
+
+        for e in expirari:
+            e.valabilitate_sfarsit = get_romanian_date(e.valabilitate_sfarsit)
+
         context = {
-            'expirari': Expirari.objects.filter(mesaje_trimise=0),
-            'trimise': Expirari.objects.exclude(mesaje_trimise=0),
+            'expirari': expirari,
             'mesaje': Messages.objects.all(),
         } 
 

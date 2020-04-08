@@ -36,11 +36,11 @@ def sendSMS(expirari, messageObject):
 
     client = nexmo.Client(key=settings.NEXMO_API_KEY, secret=settings.NEXMO_SECRET)
     message = messageObject.message
-    
+
     for expirare in expirari:
         numar_telefon = expirare.numar_telefon.replace(' ', '')
         valabilitate_sfarsit = get_romanian_date(expirare.valabilitate_sfarsit)
-        logger.error(valabilitate_sfarsit)
+
         response = client.send_message({
             'from': 'Asigurari',
             'to': numar_telefon,
@@ -48,8 +48,7 @@ def sendSMS(expirari, messageObject):
         })
 
         if response['messages'][0]['status'] == '0':
-            expirare.mesaje_trimise += 1
-            expirare.save()
+            expirare.delete()
         else:
             messages.error('Mesajul nu a putut fi trimis pentru numarul lui {} +\
                    pe numarul de telefon {}.'.format(expirare.name, expirare.numar_telefon))
