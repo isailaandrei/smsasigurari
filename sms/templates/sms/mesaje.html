@@ -1,0 +1,48 @@
+{% extends "sms/base.html" %}
+{% load crispy_forms_tags %}
+{% block page_content %}
+    <h1>Incarca un mesaj</h1>
+
+  <form action="{% url "sms-mesaje" %}" method="post">
+    {% csrf_token %}
+    {{form | crispy}}
+    <button type="submit" class="btn btn-success">Salveaza mesajul</button>
+  </form>
+
+
+<br><br><br>
+
+<h3> Legenda </h3>
+
+<br>
+  <table>
+    <thead>
+      <tr>
+        <th>Tag</th>
+        <th>Descriere</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{nume}</td>
+        <td>Numele asiguratului</td>
+      </tr>
+      <tr>
+        <td>{valabilitate_sfarsit}</td>
+        <td>Data la care expira polita</td>
+      </tr>
+      <tr>
+        <td>{numar_masina}</td>
+        <td>Numarul de inmatriculare al autovehiculului asigurat (pentru asigurari RCA)</td>
+      </tr>
+      <tr>
+        <td>{tip_asigurare}</td>
+        <td>Tipul de asigurare: RCA, Viata etc.</td>
+      </tr>
+    <tbody>
+</table>
+
+<br><br><br><br><br><br>
+
+
+{% endblock page_content %}
