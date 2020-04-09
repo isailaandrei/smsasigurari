@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
 from django.template import RequestContext
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -7,13 +7,12 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views import View
 
-
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseRedirect
 
 from .models import Expirari, Messages, sendSMS, get_romanian_date
 from .utils.fileUpload import uploadCSV
-from .forms import ExpirariForm
+from .forms import ExpirariForm, MessagesForm
 
 import logging
 import json
@@ -83,4 +82,19 @@ class LoadView(View):
     def post(self, request):
         return uploadCSV(request)     
 
+@method_decorator(login_required, name='dispatch')
+class MesajeView(View):
+
+    def get(self, request):
+        form = MessagesForm()
+        return render(request, "sms/mesaje.html", {'form': form})
+    
+    def post(self, request):
+        form = MessagesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Mesajul a fost adaugat!')
+            return redirect('sms-mesaje')
+
+        
 

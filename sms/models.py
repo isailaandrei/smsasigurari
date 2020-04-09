@@ -14,7 +14,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class Expirari(models.Model):
-    name = models.CharField(blank = True, max_length=100)
+    nume = models.CharField(blank = True, max_length=100)
     numar_telefon = models.CharField(max_length=20)
     numar_masina = models.CharField(max_length=10)
     tip_asigurare = models.CharField(max_length=20)
@@ -32,18 +32,22 @@ class Messages(models.Model):
     def __str__(self):
         return self.name
 
+
+
 def sendSMS(expirari, messageObject):
 
     client = nexmo.Client(key=settings.NEXMO_API_KEY, secret=settings.NEXMO_SECRET)
-    message = messageObject.message
 
     for expirare in expirari:
         valabilitate_sfarsit = get_romanian_date(expirare.valabilitate_sfarsit)
+        message = get_formatted_message(expirare, messageObject.message) 
 
+        logger.error(message)
+        return
         response = client.send_message({
             'from': 'Asigurari',
             'to': expirare.numar_telefon,
-            'text': message.format(expirare.numar_masina, valabilitate_sfarsit)
+            'text': message
         })
 
         if response['messages'][0]['status'] == '0':
@@ -75,3 +79,11 @@ def get_romanian_date(date):
 
     return valabilitate_sfarsit
         
+def get_formatted_message(expirare, message):
+    fields = ['nume','numar_telefon','numar_masina','tip_asigurare','valabilitate_sfarsit','mesaje_trimise', 'sucursala']
+    for field in fields:
+        if field == 'valabilitate_sfarsit':
+            message = message.replace('{' + field + '}', get_romanian_date(getattr(expirare, field)))
+            continue
+        message = message.replace('{' + field + '}', str(getattr(expirare, field)))
+    return message
