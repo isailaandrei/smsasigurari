@@ -142,7 +142,7 @@ STATIC_ROOT = 'sms/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-DATE_INPUT_FORMATS = ('%d/%m/%Y', )
+DATE_INPUT_FORMATS = ['%d/%m/%Y', '%d-%m-%Y', '%Y-%m-%d', '%Y/%m/%d']
 
 USE_L10N = True
 
