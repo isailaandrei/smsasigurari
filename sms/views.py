@@ -44,7 +44,6 @@ class SendView(View):
 
     def post(self, request):
 
-        logger.error('here')
         expirariIds = request.POST.get('expirari-ids', None)
         messageId = request.POST.get('msg-id', '')
         delete_rows = request.POST.get('Delete', False)
@@ -52,14 +51,13 @@ class SendView(View):
         expirariIds = json.loads(expirariIds)
 
         if delete_rows:
-            logger.error('here2')
             Expirari.objects.filter(pk__in=expirariIds).delete()
             return JsonResponse({'success':'true'})
       
         try:
             expirari = Expirari.objects.filter(pk__in=expirariIds)
             message = Messages.objects.filter(pk=messageId)[0]
-            sendSMS(expirari, message)
+            sendSMS(request, expirari, message)
         except Exception as e:
             logger.error(str(e))
             return JsonResponse({'success':'false'})

@@ -62,29 +62,37 @@ def uploadCSV(request):
             fields.append('X')
 
             data_dict = {}
-            data_dict['nume'] = fields[pos.get('nume', -1)]
-            data_dict['numar_masina'] = fields[pos.get('numar_masina', -1)]
             data_dict['tip_asigurare'] = fields[pos.get('tip_asigurare', -1)]
+            
+
+            # Doar polite RCA deocamdata
+            if data_dict['tip_asigurare'] != 'RCA':
+                atLeastOneIssue = True
+                continue
+
+            data_dict['numar_masina'] = fields[pos.get('numar_masina', -1)]            
+            if data_dict['numar_masina'] == '' or len(data_dict['numar_masina']) > 10:
+                messages.warning(request, 'Numarul de inmatriculare este incorect {}'.format(data_dict['numar_masina']))
+                continue
+
+            data_dict['nume'] = fields[pos.get('nume', -1)]
             data_dict['numar_telefon'] = fields[pos.get('numar_telefon', -1)]
             data_dict['valabilitate_sfarsit'] = fields[pos.get('valabilitate_sfarsit', -1)]
-            
+           
+
             # TODO: Schimba valoarea hardcodata 
             data_dict['sucursala'] = 'Alba'
 
 
-            # Doar polite RCA deocamdata
-            if data_dict['tip_asigurare'] != 'RCA':
-                messages.warning(request, 'Polita {} pe numele {} nu a putut fi incarcata.'.format(data_dict['tip_asigurare'], data_dict['nume']))
-                atLeastOneIssue = True
-                continue
-
+            
             # Curata numarul de telefon
             try:
                 data_dict['numar_telefon'] = get_clean_phone_number(data_dict['numar_telefon'])
-            except Exception as e:
-                messages.warning('Acest numar de telefon nu poate fi incarcat. Eroarea: {}'.format(str(e)))
+            except ValueError as e:
+                # messages.warning(request, 'Acest numar de telefon nu poate fi incarcat .')
                 atLeastOneIssue = True
                 continue
+
 
             try:
                 form = ExpirariForm(data_dict)
@@ -101,12 +109,12 @@ def uploadCSV(request):
                 pass
 
         if atLeastOneIssue:
-            messages.success(request, 'Restul randurilor au fost incarcate cu success')
+            messages.success(request, 'Restul politelor RCA au fost incarcate cu success')
         else:
-            messages.success(request, 'Toate randurile au fost incarcate cu success')
+            messages.success(request, 'Toate polite RCA au fost incarcate cu success')
 
 
-    except Exception as e:
+    except (ValueError, Exception) as e:
         messages.warning(request, 'Nu s-a putut incarca. Eroarea: {}'.format(str(e)))
         pass
 
@@ -132,9 +140,14 @@ def remove_commas_inside_fields(line):
 
 def get_clean_phone_number(numar):
 
-    
+    numar = numar.replace(' ', '')
+
+    if numar == '':
+        raise ValueError('Numarul de telefon trebuie specificat.')
+
     if numar.startswith(('0258', '258')):
-        raise Exception('Nu se pot introduce numere de telefon fix')
+        raise ValueError('Nu se pot introduce numere de telefon fix')
+
     
     # Daca nu are prefixul de tara, presupune ca tara e Romania 
     if numar.startswith('7'):
@@ -146,4 +159,5 @@ def get_clean_phone_number(numar):
     if numar.startswith(('40', '+40', '+44', '44')):
         return numar
 
-    raise Exception('Numarul de telefon este intr-un format necunoscut.')
+    raise ValueError('Nu se poate incarca numarul')
+    
