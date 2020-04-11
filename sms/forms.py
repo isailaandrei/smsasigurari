@@ -11,7 +11,6 @@ class ExpirariForm(forms.ModelForm):
 
 
 class MessagesForm(forms.ModelForm):
-
     mesajExemplu = '''Exemplu: Buna ziua domnule {nume}. Asigurarea pentru masina cu numarul {numar_masina} expira la data {valabilitate_sfarsit}.'
                     \n\nImportant: Asigurati-va ca tagurile sunt scrie corect si faceti un test inainte sa trimiteti mesajul clientilor.'''
     name = forms.CharField(label = 'Nume', widget=forms.TextInput(attrs={'placeholder': 'Exemplu: RCA - Standard'}))
