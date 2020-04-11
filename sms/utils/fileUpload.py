@@ -17,6 +17,7 @@ def uploadCSV(request, csv_file, eFileName):
         eFile = open(eFileName, 'w')
         file_data = csv_file.read().decode("utf-8")     
         lines = file_data.split("\n")
+        
         headers = lines[0].split(',')
 
         writer = csv.writer(eFile)
@@ -27,6 +28,7 @@ def uploadCSV(request, csv_file, eFileName):
         noOfRows = len(lines)-1
         pos = {}
         for i, h in enumerate(headers):
+                h = h.replace('\n', '')
                 if h == 'Asigurat':
                     pos['nume'] = i
                 elif h == 'Telefon Asigurat':
@@ -112,6 +114,8 @@ def uploadCSV(request, csv_file, eFileName):
         return noOfErrors
 
 def remove_commas_inside_fields(line):
+
+    line = line.replace('\n', '')
     # Remove any commas inside fields
     while '"' in line:
         fc = line.find('"')
