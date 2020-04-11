@@ -91,6 +91,7 @@ class LoadView(View):
 
         if descarca:
             response = FileResponse(open(request.session['csvFileName'], 'rb'), content_type='text/csv')
+            response['Content-Disposition'] = "inline; filename={}".format(request.session['csvFileName'])
             return response
 
         # Altfel creeaza fisierul
