@@ -90,8 +90,7 @@ class LoadView(View):
         descarca = request.POST.get('descarca', False)
 
         if descarca:
-            response = FileResponse(open(request.session['csvFileName'], 'rb'))
-            response["Content-Disposition"] = 'attachment; filename="''"'.format(request.session['csvFileName'])
+            response = FileResponse(open(request.session['csvFileName'], 'rb'), content_type='text/csv')
             return response
 
         # Altfel creeaza fisierul
