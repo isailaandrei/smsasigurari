@@ -17,7 +17,7 @@ def uploadCSV(request, csv_file, eFileName):
         eFile = open(eFileName, 'w')
         file_data = csv_file.read().decode("utf-8")     
         lines = file_data.split("\n")
-        
+
         headers = lines[0].split(',')
 
         writer = csv.writer(eFile)
@@ -152,5 +152,5 @@ def get_clean_phone_number(numar):
     if numar.startswith(('40', '+40', '+44', '44', '0040', '0044')):
         return numar
 
-    raise ValueError('Nu se poate incarca numarul')
+    raise ValueError('Numarul de telefon are un format necunoscut')
     

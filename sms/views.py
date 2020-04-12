@@ -15,6 +15,7 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from .models import Expirari, Messages, sendSMS, get_romanian_date
 from .utils.fileUpload import uploadCSV
 from .forms import ExpirariForm, MessagesForm
+from django.conf import settings
 
 import logging
 import json
@@ -30,6 +31,7 @@ class HomeView(View):
 
     def get(self, request):
 
+        logger.error(settings.DEBUG)
         expirari = Expirari.objects.filter(mesaje_trimise=0)
 
         for e in expirari:
@@ -101,7 +103,7 @@ class LoadView(View):
             return redirect('sms-incarca')
         
         # Initialize errors file
-        eFileName = 'errors_{}.csv'.format(csv_file.name.split()[0])
+        eFileName = 'erori{}.csv'.format(csv_file.name.split()[0])
         if os.path.exists(eFileName):
             os.remove(eFileName)  
 

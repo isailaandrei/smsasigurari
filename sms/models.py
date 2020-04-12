@@ -50,7 +50,7 @@ def sendSMS(request, expirari, messageObject):
         if response['messages'][0]['status'] == '0':
             expirare.delete()
         else:
-            logger.error('Mesajul nu a putut fi trimis: {}'.format(response['messages'][0]))
+            logger.error('Mesajul nu a putut fi trimis: {}'.format(response['messages'][0]['error-text']))
             messages.warning(request, 'Mesajul nu a putut fi trimis lui {} pe numarul de telefon {}.'.format(expirare.nume, expirare.numar_telefon))
 
 def get_romanian_date(date):
