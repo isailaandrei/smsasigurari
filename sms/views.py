@@ -62,11 +62,12 @@ class SendView(View):
         try:
             expirari = Expirari.objects.filter(pk__in=expirariIds)
             message = Messages.objects.filter(pk=messageId)[0]
-            sendSMS(request, expirari, message)
+            trimise = sendSMS(request, expirari, message)
         except Exception as e:
             logger.error(str(e))
             return JsonResponse({'success':'false'})
 
+        messages.success(request, '{} din {} mesaje au fost trimise'.format(trimise, len(expirari)))
         return JsonResponse({'success':'true'})    
      
 
@@ -88,7 +89,7 @@ class LoadView(View):
     def post(self, request):
 
 
-        # Descarca fisierul daca parametrul argumentul 'descarca' e True
+        # Descarca fisierul daca argumentul 'descarca' e True
         descarca = request.POST.get('descarca', False)
 
         if descarca:
@@ -103,7 +104,7 @@ class LoadView(View):
             return redirect('sms-incarca')
         
         # Initialize errors file
-        eFileName = 'erori{}.csv'.format(csv_file.name.split()[0])
+        eFileName = 'erori_{}.csv'.format(csv_file.name.split()[0])
         if os.path.exists(eFileName):
             os.remove(eFileName)  
 

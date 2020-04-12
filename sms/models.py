@@ -37,7 +37,7 @@ class Messages(models.Model):
 def sendSMS(request, expirari, messageObject):
 
     client = nexmo.Client(key=settings.NEXMO_API_KEY, secret=settings.NEXMO_SECRET)
-
+    successful = 0
     for expirare in expirari:
         message = get_formatted_message(expirare, messageObject.message) 
 
@@ -49,9 +49,12 @@ def sendSMS(request, expirari, messageObject):
 
         if response['messages'][0]['status'] == '0':
             expirare.delete()
+            successful += 1
         else:
             logger.error('Mesajul nu a putut fi trimis: {}'.format(response['messages'][0]['error-text']))
             messages.warning(request, 'Mesajul nu a putut fi trimis lui {} pe numarul de telefon {}.'.format(expirare.nume, expirare.numar_telefon))
+    return successful
+
 
 def get_romanian_date(date):
 
