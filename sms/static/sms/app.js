@@ -34,10 +34,17 @@
             stateSave: true,
             scrollCollapse: true,
             scrollY: '55vh',
+            order: [[5, 'desc']],
             "lengthMenu": [[10, 25, 50, 100, 250], [10, 25, 50, 100, 250]],
-              "columnDefs": [
-                { "width": "8%", "targets": 0 }
-              ]
+            columns: [
+                { orderable: false, width: "3%" },
+                { orderable: false, width: "3%" },
+                null,
+                null,
+                null,
+                null,
+                null
+            ]
         });  
     });
 
@@ -119,6 +126,51 @@
          $("#inputState").change(function () {
             var id = $('#inputState').children(":selected").attr("title")
             $("#message-textarea")[0].value = id;
+    });
+
+    // Modify fields modal
+    $(document).on("click", ".modifyField", function () {
+        var currentRow=$(this).closest("tr"); 
+        
+        var id = $(this).attr('id')
+        var nume = currentRow.find("td:eq(2)").text()
+        var tip_asigurare = currentRow.find("td:eq(3)").text()
+        var numar_masina = currentRow.find("td:eq(4)").text()
+        var numar_telefon = currentRow.find("td:eq(5)").text()
+
+        $('#modify_nume').val(nume)
+        $('#modify_tip_asigurare').val(tip_asigurare) 
+        $('#modify_numar_masina').val(numar_masina) 
+        $('#modify_numar_telefon').val(numar_telefon)  
+        $('#modify_id').val(id)  
+
+    });
+
+    $("#modifyExpirare").click(function () {
+        var nume = $('#modify_nume').val()
+        var tip_asigurare = $('#modify_tip_asigurare').val()
+        var numar_masina = $('#modify_numar_masina').val()
+        var numar_telefon = $('#modify_numar_telefon').val()
+        var id = $('#modify_id').val()
+
+        $.ajax({
+            type: "POST",
+            url: '/modify/',
+            data: {
+              'id': id,
+              'nume': nume,
+              'tip_asigurare': tip_asigurare, 
+              'numar_masina': numar_masina, 
+              'numar_telefon': numar_telefon, 
+            },
+            dataType: 'json',
+            success: function (data) {
+              location.reload();
+            },
+            error: function (data) {
+              window.alert('A aparut o eroare la editare')
+            }
+      });
     });
 
 

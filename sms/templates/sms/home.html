@@ -12,6 +12,7 @@
                 <th class="active">
                     <input type="checkbox" class="select-all checkbox" name="select-all" />
                 </th>
+                <th class='th-sm'>Edit</th>
                 <th class='th-sm'>Nume</th>
                 <th class='th-sm'>Tip polita</th>
                 <th class='th-sm'>Numar masina</th>
@@ -26,8 +27,8 @@
                 <tr>    
                     <td class="active">
                     <input type="checkbox" class="select-item checkbox" name="select-item" value="{{ expirare.id }}" />
-                    <button class="btn modifyField" data-toggle="modal" data-target="#EditField" id="{{expirare.id}}"><i class="fa fa-bars"></i></button>
                     </td>
+                    <td>   <button class="btn modifyField" data-toggle="modal" data-target="#EditField" id="{{expirare.id}}"><i class="fa fa-bars"></i></button></td>
                     
                     <td>{{ expirare.nume }}</td>
                     <td>{{ expirare.tip_asigurare}}</td>
@@ -134,10 +135,10 @@ $(document).on("click", ".modifyField", function () {
     var currentRow=$(this).closest("tr"); 
     
     var id = $(this).attr('id')
-    var nume = currentRow.find("td:eq(1)").text()
-    var tip_asigurare = currentRow.find("td:eq(2)").text()
-    var numar_masina = currentRow.find("td:eq(3)").text()
-    var numar_telefon = currentRow.find("td:eq(4)").text()
+    var nume = currentRow.find("td:eq(2)").text()
+    var tip_asigurare = currentRow.find("td:eq(3)").text()
+    var numar_masina = currentRow.find("td:eq(4)").text()
+    var numar_telefon = currentRow.find("td:eq(5)").text()
 
     $('#modify_nume').val(nume)
     $('#modify_tip_asigurare').val(tip_asigurare) 
@@ -168,7 +169,7 @@ $("#modifyExpirare").click(function () {
         success: function (data) {
           location.reload();
         },
-        error: function(data) {
+        error: function (data) {
           window.alert('A aparut o eroare la editare')
         }
   });
