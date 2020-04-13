@@ -29,13 +29,13 @@ $.ajaxSetup({
 
 
 // home.html scripts
-
 $(document).ready(function() {
-$('#tabel-expirari').DataTable();
-});
-
-$(document).ready(function() {
-$('#tabel-trimise').DataTable();
+    $('#tabel-expirari').DataTable({
+        stateSave: true,
+        scrollCollapse: true,
+        scrollY: '55vh',
+        "lengthMenu": [[10, 25, 50, 100, 250], [10, 25, 50, 100, 250]]
+    });  
 });
 
    $(function(){
@@ -85,7 +85,6 @@ $('#tabel-trimise').DataTable();
                     dataType: 'json',
                     success: function (data) {
                         location.reload();
-                        // alert("Success! SMSurile au fost trimise");
                     }
                   });
             }

@@ -31,7 +31,6 @@ class HomeView(View):
 
     def get(self, request):
 
-        logger.error(settings.DEBUG)
         expirari = Expirari.objects.filter(mesaje_trimise=0)
 
         for e in expirari:
@@ -88,13 +87,14 @@ class LoadView(View):
     
     def post(self, request):
 
-
         # Descarca fisierul daca argumentul 'descarca' e True
         descarca = request.POST.get('descarca', False)
-
         if descarca:
-            response = FileResponse(open(request.session['csvFileName'], 'rb'), content_type='text/csv')
-            response['Content-Disposition'] = "inline; filename={}".format(request.session['csvFileName'])
+            fileName = request.session['csvFileName']
+            response = FileResponse(open(fileName, 'rb'), content_type='text/csv')
+            response['Content-Disposition'] = "inline; filename={}".format(fileName)
+            if os.path.exists(fileName):
+                os.remove(fileName)
             return response
 
         # Altfel creeaza fisierul
@@ -104,9 +104,9 @@ class LoadView(View):
             return redirect('sms-incarca')
         
         # Initialize errors file
-        eFileName = 'erori_{}.csv'.format(csv_file.name.split()[0])
+        eFileName = 'erori_{}.csv'.format(csv_file.name.split('.')[0])
         if os.path.exists(eFileName):
-            os.remove(eFileName)  
+            os.remove(eFileName)
 
         noOfErrors = uploadCSV(request, csv_file, eFileName)
 

@@ -73,7 +73,7 @@ def get_romanian_date(date):
         'Dec': 'Decembrie',
     }
 
-    valabilitate_sfarsit = date.strftime('%d %b %Y')
+    valabilitate_sfarsit = date.strftime('%d-%b-%Y')
     for eng, rom in months_translate.items():
         valabilitate_sfarsit = valabilitate_sfarsit.replace(eng, rom)
 
