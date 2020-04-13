@@ -1,9 +1,11 @@
 from django.contrib import messages
 from sms.forms import ExpirariForm
+from sms.models import Expirari
 
 import csv
 import logging
 import os
+import datetime
 
 
 # Get an instance of a logger
@@ -12,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 def uploadCSV(request, csv_file, eFileName):
 
-    noOfErrors = 0
+    trimise = 0
     try: 
         eFile = open(eFileName, 'w')
         file_data = csv_file.read().decode("utf-8")     
@@ -48,10 +50,8 @@ def uploadCSV(request, csv_file, eFileName):
 
             fields = line.split(",")
             if len(fields) != noOfColumns:
-                messages.warning(request, 'Randul urmator nu a putut fi incarcat: {}. Numarul de celule nu corespunde'.format(fields))
                 fields.append['Numarul de celule nu corespunde']
                 writer.writerow(fields)
-                noOfErrors += 1
                 continue
 
             for f in fields:
@@ -67,14 +67,14 @@ def uploadCSV(request, csv_file, eFileName):
             if data_dict['tip_asigurare'] not in ('RCA', 'CASCO', 'INCENDIU'):
                 fields[-1] = 'Polite te tipul {} nu pot fi incarcate.'.format(data_dict['tip_asigurare'])
                 writer.writerow(fields)
-                noOfErrors += 1
                 continue
 
             data_dict['numar_masina'] = fields[pos.get('numar_masina', -1)]
             data_dict['nume'] = fields[pos.get('nume', -1)]
             data_dict['numar_telefon'] = fields[pos.get('numar_telefon', -1)]
             data_dict['valabilitate_sfarsit'] = fields[pos.get('valabilitate_sfarsit', -1)]
-           
+            data_dict['user'] = request.user.username
+
             # TODO: Schimba valoarea hardcodata 
             data_dict['sucursala'] = 'Alba'
             
@@ -84,7 +84,13 @@ def uploadCSV(request, csv_file, eFileName):
             except ValueError as e:
                 fields[-1] = str(e)
                 writer.writerow(fields)
-                noOfErrors += 1
+                continue
+
+            # Don't add if it already exists
+            formatted_datetime = datetime.datetime.strptime(data_dict['valabilitate_sfarsit'], "%d/%m/%Y").date()
+            if Expirari.objects.filter(valabilitate_sfarsit = formatted_datetime, nume = data_dict['nume'], numar_telefon = data_dict['numar_telefon']).exists():
+                fields[-1] = 'O polita asemanatoare a fost incarcata deja'
+                writer.writerow(fields)
                 continue
 
             try:
@@ -95,23 +101,22 @@ def uploadCSV(request, csv_file, eFileName):
                     fields[-1] = 'Una dintre celule nu are formatul corespunzator'
                     logger.error(form.errors.as_json())
                     writer.writerow(fields)
-                    noOfErrors += 1
             except Exception as e:
                 fields[-1] = str(e)
                 writer.writerow(fields)
-                noOfErrors += 1
+                continue
+            trimise += 1
 
     except Exception as e:
-        messages.warning(request, 'Eroare: {} din {} au fost incarcate'.format(noOfRows-noOfErrors, noOfRows))
+        messages.warning(request, 'Eroare: {}:'.format(str(e)))
         logger.error('Upload Error: {}'.format(str(e)))
     finally:
-        logger.error(noOfErrors)  
-        if noOfErrors > 0:
-            messages.success(request, '{} din {} polite au fost incarcate'.format(noOfRows-noOfErrors, noOfRows))
+        if trimise < noOfRows:
+            messages.success(request, '{} din {} polite au fost incarcate'.format(trimise, noOfRows))
         else:
             messages.success(request, 'Toate cele {} polite au fost incarcate cu success'.format(noOfRows))
         eFile.close()
-        return noOfErrors
+        return noOfRows-trimise
 
 def remove_commas_inside_fields(line):
 

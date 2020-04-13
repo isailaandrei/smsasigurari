@@ -5,18 +5,17 @@ from django.contrib import messages
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import FormView
 
 
 @method_decorator(login_required, name='dispatch')
-class RegisterView(View):
+class RegisterView(FormView):
 
-    def post(self, request):
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, f'Contul dumneavoastra a fost creat!')
-            return redirect('login')
-    
-    def get(self, request):
-        form = UserRegisterForm()
-        return render(request, 'users/register.html', {'form': form})
+    template_name = 'users/register.html'
+    form_class = UserRegisterForm
+    success_url = '/login'
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Contul dumneavoastra a fost creat!')
+        form.save()
+        return super().form_valid(form)

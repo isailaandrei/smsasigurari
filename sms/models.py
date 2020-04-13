@@ -21,9 +21,10 @@ class Expirari(models.Model):
     sucursala = models.CharField(blank=False, max_length=100)
     mesaje_trimise = models.IntegerField(blank=True, default=0)
     valabilitate_sfarsit = models.DateField()
+    user = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return self.nume
 
 class Messages(models.Model):
     name = models.TextField()
@@ -31,7 +32,6 @@ class Messages(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 def sendSMS(request, expirari, messageObject):

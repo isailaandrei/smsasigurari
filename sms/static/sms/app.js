@@ -1,44 +1,50 @@
  // <!-- Send csrf token when making AJAX requests-->
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
         }
-    }
-});
+    });
+
+    var editor;
+    // Data Table
+    $(document).ready(function() {
+        $('#tabel-expirari').DataTable({
+            stateSave: true,
+            scrollCollapse: true,
+            scrollY: '55vh',
+            "lengthMenu": [[10, 25, 50, 100, 250], [10, 25, 50, 100, 250]],
+              "columnDefs": [
+                { "width": "8%", "targets": 0 }
+              ]
+        });  
+    });
 
 
-// home.html scripts
-$(document).ready(function() {
-    $('#tabel-expirari').DataTable({
-        stateSave: true,
-        scrollCollapse: true,
-        scrollY: '55vh',
-        "lengthMenu": [[10, 25, 50, 100, 250], [10, 25, 50, 100, 250]]
-    });  
-});
 
-   $(function(){
+    // home.html scripts
+    $(function(){
 
         //button send SMS
         $("#selected").click(function () {
@@ -114,6 +120,7 @@ $(document).ready(function() {
             var id = $('#inputState').children(":selected").attr("title")
             $("#message-textarea")[0].value = id;
     });
+
 
 
 });

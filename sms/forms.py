@@ -7,7 +7,7 @@ class ExpirariForm(forms.ModelForm):
   
     class Meta:
         model = Expirari
-        fields = ['nume','numar_telefon','numar_masina','tip_asigurare','valabilitate_sfarsit','mesaje_trimise', 'sucursala']
+        fields = ['nume','numar_telefon','numar_masina','tip_asigurare','valabilitate_sfarsit','mesaje_trimise', 'sucursala', 'user']
 
 
 class MessagesForm(forms.ModelForm):

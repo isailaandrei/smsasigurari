@@ -31,7 +31,7 @@ class HomeView(View):
 
     def get(self, request):
 
-        expirari = Expirari.objects.filter(mesaje_trimise=0)
+        expirari = Expirari.objects.filter(user=request.user.username)
 
         for e in expirari:
             e.valabilitate_sfarsit = get_romanian_date(e.valabilitate_sfarsit)
@@ -132,6 +132,28 @@ class MesajeView(View):
             form.save()
             messages.success(request, f'Mesajul a fost adaugat!')
             return redirect('sms-mesaje')
+
+def modify(request):
+    
+    try:
+        eId = request.POST.get('id', 0)
+        nume = request.POST.get('nume', 'Eroare')
+        tip_asigurare = request.POST.get('tip_asigurare', 'Eroare')
+        numar_masina = request.POST.get('numar_masina', 'Eroare')
+        numar_telefon = request.POST.get('numar_telefon', 'Eroare')
+
+        e = Expirari.objects.filter(pk=eId).first()
+
+        e.nume = nume
+        e.tip_asigurare = tip_asigurare
+        e.numar_masina = numar_masina
+        e.numar_telefon = numar_telefon
+
+        e.save()
+    except:
+        return JsonResponse({'success':'false'})
+    return JsonResponse({'success':'true'})
+
 
         
 

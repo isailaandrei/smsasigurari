@@ -26,9 +26,9 @@
                 <tr>    
                     <td class="active">
                     <input type="checkbox" class="select-item checkbox" name="select-item" value="{{ expirare.id }}" />
+                    <button class="btn modifyField" data-toggle="modal" data-target="#EditField" id="{{expirare.id}}"><i class="fa fa-bars"></i></button>
                     </td>
                     
-
                     <td>{{ expirare.nume }}</td>
                     <td>{{ expirare.tip_asigurare}}</td>
                     <td>{{ expirare.numar_masina }}</td>
@@ -45,7 +45,7 @@
     <div>
         <button id="select-all" class="btn button-default btn-secondary">(De) Selecteaza Tot</button>
         <button id="delete" type="button" class="btn btn-danger">Sterge</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"> Trimite </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SendSMS"> Trimite </button>
 
     </div>
 
@@ -54,13 +54,13 @@
 <br/><br/><br/><br/>
 
 
-<!-- Modal -->
+<!-- Send texts modal -->
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="SendSMS" tabindex="-1" role="dialog" aria-labelledby="SendSMSLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Trimite SMSuri</h5>
+        <h5 class="modal-title" id="SendSMSLabel">Trimite SMSuri</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -94,5 +94,86 @@
     </div>
   </div>
 </div>
+
+<!-- Edit fields modal -->
+
+<div class="modal fade" id="EditField" tabindex="-1" role="dialog" aria-labelledby="EditFieldLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditFieldLabel">Modifica Expirare</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+            <div class="form-group">
+              <label>Nume</label>
+             <input id='modify_nume'class="form-control"=>
+              <label>Tip Asigurare</label>
+             <input id='modify_tip_asigurare'class="form-control"=>
+              <label>Numar masina</label>
+             <input id='modify_numar_masina'class="form-control"=>
+              <label>Telefon Asigurat</label>
+             <input id='modify_numar_telefon'class="form-control"=>
+             <input id='modify_id' type='hidden'>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="float-left btn btn-secondary " data-dismiss="modal">Inchide</button>
+        <button id="modifyExpirare" type="button" class="btn btn-primary">Modifica</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).on("click", ".modifyField", function () {
+    var currentRow=$(this).closest("tr"); 
+    
+    var id = $(this).attr('id')
+    var nume = currentRow.find("td:eq(1)").text()
+    var tip_asigurare = currentRow.find("td:eq(2)").text()
+    var numar_masina = currentRow.find("td:eq(3)").text()
+    var numar_telefon = currentRow.find("td:eq(4)").text()
+
+    $('#modify_nume').val(nume)
+    $('#modify_tip_asigurare').val(tip_asigurare) 
+    $('#modify_numar_masina').val(numar_masina) 
+    $('#modify_numar_telefon').val(numar_telefon)  
+    $('#modify_id').val(id)  
+
+});
+
+$("#modifyExpirare").click(function () {
+    var nume = $('#modify_nume').val()
+    var tip_asigurare = $('#modify_tip_asigurare').val()
+    var numar_masina = $('#modify_numar_masina').val()
+    var numar_telefon = $('#modify_numar_telefon').val()
+    var id = $('#modify_id').val()
+
+    $.ajax({
+        type: "POST",
+        url: '/modify/',
+        data: {
+          'id': id,
+          'nume': nume,
+          'tip_asigurare': tip_asigurare, 
+          'numar_masina': numar_masina, 
+          'numar_telefon': numar_telefon, 
+        },
+        dataType: 'json',
+        success: function (data) {
+          location.reload();
+        },
+        error: function(data) {
+          window.alert('A aparut o eroare la editare')
+        }
+  });
+});
+
+</script>
 
 {% endblock %}
