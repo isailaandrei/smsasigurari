@@ -45,7 +45,11 @@
                 null,
                 null
             ]
-        });  
+        });
+
+        $("input.select-item").each(function (index,item) {
+            item.checked = false;
+        });
     });
 
 
