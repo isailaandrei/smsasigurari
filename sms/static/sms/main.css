@@ -89,13 +89,26 @@ table {
   width: 100%;
 }
 
-td, th {
+td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 0px !important;
 
 }
 
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding-top: 3px !important;
+
+ }
+
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+
+.table td, .table th {
+  text-align: center;
+  vertical-align: middle;
 }
