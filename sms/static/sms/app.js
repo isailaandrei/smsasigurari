@@ -35,7 +35,7 @@
             scrollCollapse: true,
             scrollY: '55vh',
             order: [[5, 'desc']],
-            "lengthMenu": [[10, 25, 50, 100, 250], [10, 25, 50, 100, 250]],
+            "lengthMenu": [[5, 10, 25, 50, 100, 250], [5, 10, 25, 50, 100, 250]],
             columns: [
                 { orderable: false, width: "3%" },
                 { orderable: false, width: "3%" },
