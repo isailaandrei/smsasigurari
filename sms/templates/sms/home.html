@@ -124,57 +124,12 @@
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="float-left btn btn-secondary " data-dismiss="modal">Inchide</button>
-        <button id="modifyExpirare" type="button" class="btn btn-primary">Modifica</button>
+        <button id="modifyExpirare" type="button" class="btn btn-primary" data-dismiss="modal">Modifica</button>
       </div>
     </div>
   </div>
 </div>
 
-<script>
-$(document).on("click", ".modifyField", function () {
-    var currentRow=$(this).closest("tr"); 
-    
-    var id = $(this).attr('id')
-    var nume = currentRow.find("td:eq(2)").text()
-    var tip_asigurare = currentRow.find("td:eq(3)").text()
-    var numar_masina = currentRow.find("td:eq(4)").text()
-    var numar_telefon = currentRow.find("td:eq(5)").text()
 
-    $('#modify_nume').val(nume)
-    $('#modify_tip_asigurare').val(tip_asigurare) 
-    $('#modify_numar_masina').val(numar_masina) 
-    $('#modify_numar_telefon').val(numar_telefon)  
-    $('#modify_id').val(id)  
-
-});
-
-$("#modifyExpirare").click(function () {
-    var nume = $('#modify_nume').val()
-    var tip_asigurare = $('#modify_tip_asigurare').val()
-    var numar_masina = $('#modify_numar_masina').val()
-    var numar_telefon = $('#modify_numar_telefon').val()
-    var id = $('#modify_id').val()
-
-    $.ajax({
-        type: "POST",
-        url: '/modify/',
-        data: {
-          'id': id,
-          'nume': nume,
-          'tip_asigurare': tip_asigurare, 
-          'numar_masina': numar_masina, 
-          'numar_telefon': numar_telefon, 
-        },
-        dataType: 'json',
-        success: function (data) {
-          location.reload();
-        },
-        error: function (data) {
-          window.alert('A aparut o eroare la editare')
-        }
-  });
-});
-
-</script>
 
 {% endblock %}

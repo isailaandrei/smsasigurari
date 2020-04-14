@@ -58,7 +58,7 @@ def sendSMS(request, expirari, messageObject):
 
 def get_romanian_date(date):
 
-    months_translate = {
+    eng_rom_months = {
         'Jan': 'Ianuarie',
         'Feb': 'Februarie',
         'Mar': 'Martie',
@@ -74,7 +74,7 @@ def get_romanian_date(date):
     }
 
     valabilitate_sfarsit = date.strftime('%d-%b-%Y')
-    for eng, rom in months_translate.items():
+    for eng, rom in eng_rom_months.items():
         valabilitate_sfarsit = valabilitate_sfarsit.replace(eng, rom)
 
     return valabilitate_sfarsit
