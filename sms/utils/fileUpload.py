@@ -141,12 +141,6 @@ def get_clean_phone_number(numar):
 
     numar = numar.replace(' ', '')
 
-    if numar == '':
-        raise ValueError('Numarul de telefon trebuie specificat.')
-
-    if numar.startswith(('0258', '258')):
-        raise ValueError('Nu se pot introduce numere de telefon fix')
-
     # Daca nu are prefixul de tara, presupune ca tara e Romania 
     if numar.startswith('7'):
         return '+40' + numar
@@ -154,8 +148,6 @@ def get_clean_phone_number(numar):
     if numar.startswith('07'):
         return '+4' + numar
 
-    if numar.startswith(('40', '+40', '+44', '44', '0040', '0044')):
-        return numar
+    return numar
 
-    raise ValueError('Numarul de telefon are un format necunoscut')
     
