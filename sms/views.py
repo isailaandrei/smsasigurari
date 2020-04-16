@@ -66,7 +66,9 @@ class SendView(View):
             logger.error(str(e))
             return JsonResponse({'success':'false'})
 
-        messages.success(request, '{} din {} mesaje au fost trimise'.format(trimise, len(expirari)))
+        if trimise > 0:
+            messages.success(request, '{} din {} mesaje au fost trimise'.format(trimise, len(expirari)))
+        
         return JsonResponse({'success':'true'})    
      
 
