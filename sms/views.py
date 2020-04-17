@@ -158,6 +158,5 @@ def modify(request):
 
 
 def cert(request):
-
     return FileResponse(open('AA920CCDB7BC14100F7AC49C5451E46D.txt', 'rb'), content_type='text/csv')    
 
