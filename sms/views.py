@@ -1,4 +1,5 @@
 from django.shortcuts import render,  redirect
+from django.urls import reverse
 from django.template import RequestContext
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +10,6 @@ from django.views import View
 from django.contrib.messages import get_messages
 
 from django.http import FileResponse
-from django.urls import reverse
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 
 from .models import Expirari, Messages, sendSMS, get_romanian_date

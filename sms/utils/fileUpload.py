@@ -62,12 +62,13 @@ def uploadCSV(request, csv_file, eFileName):
             data_dict = {}
             data_dict['tip_asigurare'] = fields[pos.get('tip_asigurare', -1)]
             
-
+            logger.error('here')
             # Doar polite 'RCA', 'CASCO', 'INCENDIU' deocamdata
             if data_dict['tip_asigurare'] not in ('RCA', 'CASCO', 'INCENDIU'):
                 fields[-1] = 'Polite te tipul {} nu pot fi incarcate.'.format(data_dict['tip_asigurare'])
                 writer.writerow(fields)
                 continue
+
 
             data_dict['numar_masina'] = fields[pos.get('numar_masina', -1)]
             data_dict['nume'] = fields[pos.get('nume', -1)]
@@ -87,8 +88,7 @@ def uploadCSV(request, csv_file, eFileName):
                 continue
 
             # Don't add if it already exists
-            formatted_datetime = datetime.datetime.strptime(data_dict['valabilitate_sfarsit'], "%d/%m/%Y").date()
-            if Expirari.objects.filter(valabilitate_sfarsit = formatted_datetime, nume = data_dict['nume'], numar_telefon = data_dict['numar_telefon']).exists():
+            if Expirari.objects.filter(numar_masina = data_dict['numar_masina'], tip_asigurare = data_dict['tip_asigurare'], nume = data_dict['nume'], numar_telefon = data_dict['numar_telefon']).exists():
                 fields[-1] = 'O polita asemanatoare a fost incarcata deja'
                 writer.writerow(fields)
                 continue
