@@ -86,12 +86,14 @@ def uploadCSV(request, csv_file, eFileName):
                 fields[-1] = str(e)
                 writer.writerow(fields)
                 continue
+            logger.error('here3')
 
             # Don't add if it already exists
-            if Expirari.objects.filter(numar_masina = data_dict['numar_masina'], tip_asigurare = data_dict['tip_asigurare'], nume = data_dict['nume'], numar_telefon = data_dict['numar_telefon']).exists():
+            if Expirari.objects.filter(user=data_dict['user'], numar_masina = data_dict['numar_masina'], tip_asigurare = data_dict['tip_asigurare'], nume = data_dict['nume'], numar_telefon = data_dict['numar_telefon']).exists():
                 fields[-1] = 'O polita asemanatoare a fost incarcata deja'
                 writer.writerow(fields)
                 continue
+            logger.error('here4')
 
             try:
                 form = ExpirariForm(data_dict)
