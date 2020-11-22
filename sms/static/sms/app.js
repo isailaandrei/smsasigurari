@@ -141,11 +141,15 @@
         var tip_asigurare = currentRow.find("td:eq(3)").text()
         var numar_masina = currentRow.find("td:eq(4)").text()
         var numar_telefon = currentRow.find("td:eq(5)").text()
+        var comanda_id = currentRow.find("td:eq(7)").text()
+
+
 
         $('#modify_nume').val(nume)
         $('#modify_tip_asigurare').val(tip_asigurare) 
         $('#modify_numar_masina').val(numar_masina) 
-        $('#modify_numar_telefon').val(numar_telefon)  
+        $('#modify_numar_telefon').val(numar_telefon)
+        $('#modify_comanda_id').val(comanda_id)  
         $('#modify_id').val(id)  
 
     });
@@ -155,7 +159,9 @@
         var tip_asigurare = $('#modify_tip_asigurare').val()
         var numar_masina = $('#modify_numar_masina').val()
         var numar_telefon = $('#modify_numar_telefon').val()
+        var comanda_id = $('#modify_comanda_id').val()
         var id = $('#modify_id').val()
+
 
         $.ajax({
             type: "POST",
@@ -165,7 +171,9 @@
               'nume': nume,
               'tip_asigurare': tip_asigurare, 
               'numar_masina': numar_masina, 
-              'numar_telefon': numar_telefon, 
+              'numar_telefon': numar_telefon,
+              'comanda_id': comanda_id,
+
             },
             dataType: 'json',
             success: function (data) {
@@ -180,10 +188,3 @@
 
 
 });
-
-
-//<![CDATA[
-var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.trust-provider.com/" : "http://www.trustlogo.com/");
-document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
-//]]></script>
-TrustLogo("https://www.positivessl.com/images/seals/positivessl_trust_seal_sm_124x32.png", "POSDV", "none");

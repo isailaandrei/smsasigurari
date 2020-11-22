@@ -18,6 +18,8 @@
                 <th class='th-sm'>Numar masina</th>
                 <th class='th-sm'>Numar de telefon</th>
                 <th class='th-sm'>Data expirare</th>
+                <th class='th-sm'>Comanda ID</th>
+
 
             </tr>
         </thead>
@@ -35,6 +37,7 @@
                     <td>{{ expirare.numar_masina }}</td>
                     <td>{{ expirare.numar_telefon }}</td>
                     <td>{{ expirare.valabilitate_sfarsit }}</td>
+                    <td>{{ expirare.comanda_id }}</td>
 
                 </tr>
                 {% endfor %}
@@ -118,6 +121,8 @@
              <input id='modify_numar_masina'class="form-control"=>
               <label>Telefon Asigurat</label>
              <input id='modify_numar_telefon'class="form-control"=>
+             <label>Comanda ID</label>
+             <input id='modify_comanda_id'class="form-control"=>
              <input id='modify_id' type='hidden'>
           </div>
         </form>

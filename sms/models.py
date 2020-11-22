@@ -22,6 +22,7 @@ class Expirari(models.Model):
     mesaje_trimise = models.IntegerField(blank=True, default=0)
     valabilitate_sfarsit = models.DateField()
     user = models.CharField(max_length=100)
+    comanda_id = models.CharField(max_length=100, default='', blank=True, null=True)
 
     def __str__(self):
         return self.nume
@@ -80,7 +81,7 @@ def get_romanian_date(date):
     return valabilitate_sfarsit
         
 def get_formatted_message(expirare, message):
-    fields = ['nume','numar_telefon','numar_masina','tip_asigurare','valabilitate_sfarsit','mesaje_trimise', 'sucursala']
+    fields = ['nume','numar_telefon','numar_masina','tip_asigurare','valabilitate_sfarsit','mesaje_trimise', 'sucursala', 'comanda_id']
     for field in fields:
         if field == 'valabilitate_sfarsit':
             message = message.replace('{' + field + '}', get_romanian_date(getattr(expirare, field)))

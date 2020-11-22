@@ -143,6 +143,8 @@ def modify(request):
         tip_asigurare = request.POST.get('tip_asigurare', 'Eroare')
         numar_masina = request.POST.get('numar_masina', 'Eroare')
         numar_telefon = request.POST.get('numar_telefon', 'Eroare')
+        comanda_id = request.POST.get('comanda_id', 'Eroare')
+
 
         e = Expirari.objects.filter(pk=eId).first()
 
@@ -150,6 +152,8 @@ def modify(request):
         e.tip_asigurare = tip_asigurare
         e.numar_masina = numar_masina
         e.numar_telefon = numar_telefon
+        e.comanda_id = comanda_id
+
 
         e.save()
     except:
